@@ -1,8 +1,6 @@
 from rest_framework import generics, permissions
 from .models import Note
 from .serializers import NoteSerializer
-from django.contrib.auth.models import User
-from rest_framework.response import Response
 
 
 class NoteListCreateView(generics.ListCreateAPIView):

@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 # from notes_app.views import TestView
 from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token  # Add this import
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('main/', include('notes_app.urls')),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # Add this line
 ]
