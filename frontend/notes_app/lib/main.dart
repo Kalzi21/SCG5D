@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/modules/login.dart';
 // import 'services/api_service.dart'; // Import the API service
 import 'modules/notes_list.dart';
 
@@ -11,10 +12,15 @@ class NotesApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Notes App',
+      initialRoute: '/login',
+      routes: {
+        '/login': (context) => LoginScreen(),
+        '/home': (context) => NoteListScreen(),
+      },
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: NotesListScreen(token: 'YOUR_AUTH_TOKEN'), // Replace with your token
+      home: NoteListScreen(), // Replace with your token
     );
   }
 }
