@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+        <!-- Regular Text Style -->
+        <style name="PoppinsRegularText">
+            <item name="android:fontFamily">@font/poppins</item>
+            <item name="android:textStyle">normal</item>
+            <item name="android:textSize">16sp</item> <!-- Default size -->
+        </style>
+
+        <!-- Bold Text Style -->
+        <style name="PoppinsBoldText">
+            <item name="android:fontFamily">@font/poppins</item>
+            <item name="android:textStyle">bold</item>
+            <item name="android:textSize">18sp</item> <!-- Larger size for emphasis -->
+        </style>
+    <style name="PoppinsBlackText">
+            <item name="android:fontFamily">@font/poppins</item>
+            <item name="android:textStyle">bold</item>
+            <item name="android:textSize">20sp</item> <!-- Larger size for emphasis -->
+        </style>
+
+        <!-- Italic Text Style -->
+        <style name="PoppinsItalicText">
+            <item name="android:fontFamily">@font/poppins</item>
+            <item name="android:textStyle">italic</item>
+            <item name="android:textSize">16sp</item> <!-- Same size as regular but italic -->
+        </style>
+
+        <!-- Bold Italic Text Style -->
+        <style name="PoppinsBoldItalicText">
+            <item name="android:fontFamily">@font/poppins</item>
+            <item name="android:textStyle">bold|italic</item>
+            <item name="android:textSize">18sp</item> <!-- Larger size for bold italic -->
+        </style>
+
+</resources>

@@ -10,7 +10,7 @@ import com.example.notify.Models.Notes;
 
 @Database(entities = Notes.class, version = 1, exportSchema = false)
 public abstract class RoomDB extends RoomDatabase {
-    private static RoomDB database;
+    public static RoomDB database;
     private static String DATABASE_NAME = "Notify";
 
     // Modify the getInstance method to accept a Context (not specific to MainActivity)

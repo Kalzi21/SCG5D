@@ -24,6 +24,7 @@
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
+                android:padding="@dimen/activity_vertical_margin"
                 android:singleLine="true"
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"
@@ -50,7 +51,7 @@
         <TextView
             android:id="@+id/textView_date"
             android:text="Date"
-            android:textColor="@color/grey"
+            android:textColor="@color/white"
             android:singleLine="true"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
