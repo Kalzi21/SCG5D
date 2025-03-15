@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,44 +45,55 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull NotesViewHolder holder, int position) {
+        // Your existing binding code
         holder.textView_title.setText(list.get(position).getTitle());
-        holder.textView_title.setSelected(true);
-
         holder.textView_notes.setText(list.get(position).getNotes());
         holder.textView_date.setText(list.get(position).getDate());
-        holder.textView_title.setSelected(true);
 
-        if (list.get(position).isPinned()){
+        // Your existing pin icon setup
+        if (list.get(position).isPinned()) {
             holder.imageView_pin.setImageResource(R.drawable.ic_pin);
         }
 
-        // Add to onBindViewHolder():
-        holder.imageView_pin.setOnClickListener(view -> {
-            boolean newPinnedState = !list.get(position).isPinned();
-            RoomDB database = RoomDB.getInstance((MainActivity) context); ;
-            database.maindao().pin(list.get(position).getID(), newPinnedState);
-            list.get(position).setPinned(newPinnedState);
-            notifyItemChanged(position);
-        });
-
+        // Your existing color code
         int color_code = getRandomColor();
         holder.notes_container.setCardBackgroundColor(holder.itemView.getResources().getColor(color_code, null));
 
-        holder.notes_container.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                listener.onClick(list.get(holder.getAdapterPosition()));
-            }
+        // Modified long-click listener for multi-actions
+        holder.notes_container.setOnLongClickListener(view -> {
+            showActionDialog(list.get(position), holder.notes_container);
+            return true;
         });
 
-        holder.notes_container.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                listener.LongClick(list.get(holder.getAdapterPosition()), holder.notes_container);
-                return true;
-            }
-        });
+        // Keep your existing click listeners
+        holder.notes_container.setOnClickListener(view ->
+                listener.onClick(list.get(holder.getAdapterPosition())));
+    }
+
+    private void showActionDialog(Notes note, CardView cardView) {
+        CharSequence[] actions = new CharSequence[]{
+                note.isPinned() ? "Unpin" : "Pin",
+                "Edit",
+                "Delete"
+        };
+
+        new AlertDialog.Builder(context)
+                .setTitle("Note Actions")
+                .setItems(actions, (dialog, which) -> {
+                    switch (which) {
+                        case 0:
+                            listener.onActionClick(note, "toggle_pin");
+                            break;
+                        case 1:
+                            listener.onActionClick(note, "edit");
+                            break;
+                        case 2:
+                            listener.onActionClick(note, "delete");
+                            break;
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
     private int getRandomColor(){

@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.notify.Adapters.NotesListAdapters;
 import com.example.notify.Database.RoomDB;
@@ -132,37 +130,59 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // In MainActivity.java
     private final NotesClickListener notesClickListener = new NotesClickListener() {
         @Override
         public void onClick(Notes notes) {
-            // Handle click
+            // Your existing click handling
+            openNoteForEditing(notes);
+        }
+
+        @Override
+        public void LongClick(Notes notes, CardView cardView) {
+
+        }
+
+        @Override
+        public void onActionClick(Notes notes, String action) {
+            switch (action) {
+                case "toggle_pin":
+                    togglePin(notes);
+                    break;
+                case "edit":
+                    openNoteForEditing(notes);
+                    break;
+                case "delete":
+                    deleteNote(notes);
+                    break;
+            }
+        }
+
+        @Override
+        public void LongClick(Notes notes, View cardView) {
+
+        }
+
+        private void togglePin(Notes notes) {
+            boolean newState = !notes.isPinned();
+            database.maindao().pin(notes.getID(), newState);
+            refreshNotes();
+        }
+
+        private void deleteNote(Notes notes) {
+            database.maindao().delete(notes);
+            refreshNotes();
+        }
+
+        private void openNoteForEditing(Notes notes) {
             Intent intent = new Intent(MainActivity.this, NotesTakerActivity.class);
             intent.putExtra("existing_note", notes);
             noteActivityResultLauncher.launch(intent);
         }
 
-        // Update LongClick listener:
-        @Override
-        public void LongClick(Notes notes, CardView cardView) {
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("Delete Note")
-                    .setMessage("Are you sure?")
-                    .setPositiveButton("Yes", (dialog, which) -> {
-                        database.maindao().delete(notes);
-                        refreshNotes();
-                    })
-                    .setNegativeButton("No", null)
-                    .show();
-        }
-
         private void refreshNotes() {
             notes = database.maindao().getAll();
             notesListAdapters.updateList(notes);
-        }
-
-        @Override
-        public void LongClick(Notes notes, View cardView) {
-            // Handle long click
         }
     };
 }

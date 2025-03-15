@@ -10,5 +10,7 @@ public interface NotesClickListener {
     void onClick(Notes notes);
     void LongClick(Notes notes, CardView cardView);
 
+    void onActionClick(Notes notes, String action); // Unified action handler
+
     void LongClick(Notes notes, View cardView);
 }

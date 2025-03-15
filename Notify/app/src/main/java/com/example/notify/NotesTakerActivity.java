@@ -72,6 +72,7 @@ public class NotesTakerActivity extends AppCompatActivity {
             notes.setTitle(title);
             notes.setNotes(description);
             notes.setDate(formatter.format(date));
+            notes.setPinned(false); // Explicitly set to false (redundant but safe)
         }
 
         // Return result
