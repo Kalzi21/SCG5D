@@ -2,36 +2,36 @@ package com.example.notify.Database;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
+import android.util.Log;
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.notify.Models.Notes;
+
+import org.json.JSONArray;
 
 import java.util.List;
 
 @Dao
-public abstract class MainDAO {
+public interface MainDAO {
 
     @Insert(onConflict = REPLACE)
-    public void insert(Notes new_notes) {
-
-    }
+     void insert(Notes new_notes);
 
     @Query("SELECT * FROM notes ORDER BY id DESC")
-    public List<Notes> getAll() {
+     List<Notes> getAll();
 
-        return null;
-    }
+    @Query("UPDATE notes SET pinned = :pinned WHERE ID = :id")
+     void pin(int id, boolean pinned);
 
-    @Query("UPDATE notes SET title = :title, notes = :notes WHERE ID = :id")
-    void update(int id, String title, String notes) {
 
-    }
+    @Update
+     void update(Notes notes); // Replace existing update() method
 
     @Delete
-    void delete(Notes notes) {
-
-    }
+     void delete(Notes notes); // Replace existing delete() method
 }

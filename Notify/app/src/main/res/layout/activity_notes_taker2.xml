@@ -34,6 +34,7 @@
     <EditText
         android:id="@+id/editText_title"
         android:hint="Title: "
+        android:fontFamily="@font/poppins"
         android:textColorHint="@color/white"
         android:padding="8dp"
         android:textStyle="bold"
@@ -45,6 +46,7 @@
     <EditText
         android:id="@+id/editText_notes"
         android:hint="Add Notes: "
+        android:fontFamily="@font/poppins"
         android:textColorHint="@color/white"
         android:padding="8dp"
         android:textStyle="normal"

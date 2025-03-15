@@ -15,7 +15,7 @@
         <activity
             android:name=".NotesTakerActivity"
             android:theme="@style/Theme.Notify.NoActionBar"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

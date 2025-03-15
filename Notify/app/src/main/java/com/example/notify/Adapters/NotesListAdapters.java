@@ -1,5 +1,7 @@
 package com.example.notify.Adapters;
 
+import static com.example.notify.Database.RoomDB.database;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.notify.Database.RoomDB;
 import com.example.notify.MainActivity;
 import com.example.notify.Models.Notes;
 import com.example.notify.NotesClickListener;
@@ -24,6 +27,7 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder>{
     Context context;
     List<Notes> list;
     NotesClickListener listener;
+    private List<Notes> notes;
 
 
     public NotesListAdapters(MainActivity context, List<Notes> list, NotesClickListener listener) {
@@ -50,6 +54,15 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder>{
         if (list.get(position).isPinned()){
             holder.imageView_pin.setImageResource(R.drawable.ic_pin);
         }
+
+        // Add to onBindViewHolder():
+        holder.imageView_pin.setOnClickListener(view -> {
+            boolean newPinnedState = !list.get(position).isPinned();
+            RoomDB database = RoomDB.getInstance((MainActivity) context); ;
+            database.maindao().pin(list.get(position).getID(), newPinnedState);
+            list.get(position).setPinned(newPinnedState);
+            notifyItemChanged(position);
+        });
 
         int color_code = getRandomColor();
         holder.notes_container.setCardBackgroundColor(holder.itemView.getResources().getColor(color_code, null));
@@ -91,6 +104,11 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder>{
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void updateList(List<Notes> newNotes) {
+        this.list = newNotes;
+        notifyDataSetChanged();
     }
 }
 
