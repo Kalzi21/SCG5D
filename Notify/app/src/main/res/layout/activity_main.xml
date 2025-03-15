@@ -9,12 +9,22 @@
     android:background="@color/black"
     tools:openDrawer="start">
 
+    <!-- SearchView -->
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar_main"
+        android:layout_margin="8dp"
+        android:queryHint="Search notes..."
+        android:iconifiedByDefault="false"/>
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_main"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/grey"
         android:title="Notify"
+        style="@style/PoppinsBlackText"
         android:titleTextColor="@color/white" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -23,11 +33,13 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar_main"
         android:layout_margin="8dp"
+        style="@style/PoppinsRegularText"
         android:layout_above="@+id/fab_add" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add"
         android:layout_width="wrap_content"
+        android:backgroundTint="@color/grey"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"

@@ -94,30 +94,30 @@ public class MainActivity extends AppCompatActivity {
         Log.d("DatabaseCheck", "Notes Size: " + notes.size());
 
         // Add to onCreate():
-        SearchView searchView = findViewById(R.id.search_view);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filter(newText.toLowerCase());
-                return true;
-            }
-
-            private void filter(String text) {
-                List<Notes> filteredList = new ArrayList<>();
-                for (Notes note : database.maindao().getAll()) {
-                    if (note.getTitle().toLowerCase().contains(text) ||
-                            note.getNotes().toLowerCase().contains(text)) {
-                        filteredList.add(note);
-                    }
-                }
-                notesListAdapters.updateList(filteredList);
-            }
-        });
+//        SearchView searchView = findViewById(R.id.search_view);
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                filter(newText.toLowerCase());
+//                return true;
+//            }
+//
+//            private void filter(String text) {
+//                List<Notes> filteredList = new ArrayList<>();
+//                for (Notes note : database.maindao().getAll()) {
+//                    if (note.getTitle().toLowerCase().contains(text) ||
+//                            note.getNotes().toLowerCase().contains(text)) {
+//                        filteredList.add(note);
+//                    }
+//                }
+//                notesListAdapters.updateList(filteredList);
+//            }
+//        });
 
     }
 
