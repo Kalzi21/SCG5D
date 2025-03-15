@@ -13,8 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.notify.Database.RoomDB;
 import com.example.notify.MainActivity;
 import com.example.notify.Models.Notes;
 import com.example.notify.NotesClickListener;
@@ -24,14 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder>{
+public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
     Context context;
     List<Notes> list;
     NotesClickListener listener;
     private List<Notes> notes;
 
-
-    public NotesListAdapters(MainActivity context, List<Notes> list, NotesClickListener listener) {
+    // Modify constructor to accept Context (generic) instead of MainActivity
+    public NotesListAdapters(Context context, List<Notes> list, NotesClickListener listener) {
         this.context = context;
         this.list = (list != null) ? list : new ArrayList<>();
         this.listener = listener;
@@ -49,8 +47,7 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder>{
         holder.textView_title.setText(list.get(position).getTitle());
         holder.textView_notes.setText(list.get(position).getNotes());
         holder.textView_date.setText(list.get(position).getDate());
-
-        // Your existing pin icon setup
+      
         if (list.get(position).isPinned()) {
             holder.imageView_pin.setImageResource(R.drawable.ic_pin);
         }
@@ -96,10 +93,8 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder>{
                 .show();
     }
 
-    private int getRandomColor(){
-
+    private int getRandomColor() {
         List<Integer> colorCode = new ArrayList<>();
-
         colorCode.add(R.color.color1);
         colorCode.add(R.color.color2);
         colorCode.add(R.color.color3);
@@ -109,8 +104,7 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder>{
 
         Random random = new Random();
         int random_color = random.nextInt(colorCode.size());
-        return  colorCode.get(random_color);
-
+        return colorCode.get(random_color);
     }
 
     @Override
@@ -124,11 +118,11 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder>{
     }
 }
 
-class NotesViewHolder extends RecyclerView.ViewHolder{
-
+class NotesViewHolder extends RecyclerView.ViewHolder {
     CardView notes_container;
-    TextView textView_title,textView_notes,textView_date;
+    TextView textView_title, textView_notes, textView_date;
     ImageView imageView_pin;
+
     public NotesViewHolder(@NonNull View itemView) {
         super(itemView);
         notes_container = itemView.findViewById(R.id.notes_container);
@@ -136,6 +130,5 @@ class NotesViewHolder extends RecyclerView.ViewHolder{
         textView_notes = itemView.findViewById(R.id.textView_notes);
         textView_date = itemView.findViewById(R.id.textView_date);
         imageView_pin = itemView.findViewById(R.id.imageView_pin);
-
     }
 }
