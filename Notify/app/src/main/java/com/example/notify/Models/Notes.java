@@ -8,14 +8,29 @@ import java.io.Serializable;
 
 @Entity(tableName = "notes")
 public class Notes implements Serializable {
+
     @PrimaryKey(autoGenerate = true)
-    int ID = 0;
+    private int ID;
 
     @ColumnInfo(name = "title")
-    String title = "";
+    private String title;
 
     @ColumnInfo(name = "notes")
-    String notes = "";
+    private String notes;
+
+    @ColumnInfo(name = "date")
+    private String date;
+
+    @ColumnInfo(name = "pinned")
+    private boolean pinned; // For pinning notes
+
+    @ColumnInfo(name = "is_favourite")
+    private boolean isFavourite; // For Favourites
+
+    @ColumnInfo(name = "is_archived")
+    private boolean isArchived; // For Archived
+
+    // Getters and setters for the fields
 
     public int getID() {
         return ID;
@@ -57,11 +72,19 @@ public class Notes implements Serializable {
         this.pinned = pinned;
     }
 
-    @ColumnInfo(name = "date")
-    String date = "";
+    public boolean isFavourite() {
+        return isFavourite;
+    }
 
-    @ColumnInfo(name = "pinned")
-    boolean pinned = false;
+    public void setFavourite(boolean isFavourite) {
+        this.isFavourite = isFavourite;
+    }
 
+    public boolean isArchived() {
+        return isArchived;
+    }
 
+    public void setArchived(boolean isArchived) {
+        this.isArchived = isArchived;
+    }
 }
