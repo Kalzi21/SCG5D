@@ -1,8 +1,7 @@
 package com.example.notify.Adapters;
 
-import static com.example.notify.Database.RoomDB.database;
-
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.notify.MainActivity;
+
 import com.example.notify.Models.Notes;
 import com.example.notify.NotesClickListener;
 import com.example.notify.R;
@@ -49,7 +48,9 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
         holder.textView_date.setText(list.get(position).getDate());
       
         if (list.get(position).isPinned()) {
-            holder.imageView_pin.setImageResource(R.drawable.ic_pin);
+            holder.imageView_pin.setVisibility(View.VISIBLE);
+        } else {
+            holder.imageView_pin.setVisibility(View.GONE);
         }
 
         // Your existing color code
@@ -65,11 +66,25 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
         // Keep your existing click listeners
         holder.notes_container.setOnClickListener(view ->
                 listener.onClick(list.get(holder.getAdapterPosition())));
+
+        // Update onBindViewHolder
+        Notes note = new Notes();
+        holder.icon_favourite.setVisibility(note.isFavourite() ? View.VISIBLE : View.GONE);
+        holder.icon_archive.setVisibility(note.isArchived() ? View.VISIBLE : View.GONE);
+
+// Add color coding for categories
+        if (note.isArchived()) {
+            holder.notes_container.setCardBackgroundColor(Color.LTGRAY);
+        } else if (note.isFavourite()) {
+            holder.notes_container.setCardBackgroundColor(Color.YELLOW);
+        }
     }
 
-    private void showActionDialog(Notes note, CardView cardView) {
+    private void showActionDialog(Notes note, CardView notes_container) {
         CharSequence[] actions = new CharSequence[]{
                 note.isPinned() ? "Unpin" : "Pin",
+                note.isFavourite() ? "Remove Favourite" : "Add to Favourites",
+                note.isArchived() ? "Unarchive" : "Archive",
                 "Edit",
                 "Delete"
         };
@@ -78,20 +93,16 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
                 .setTitle("Note Actions")
                 .setItems(actions, (dialog, which) -> {
                     switch (which) {
-                        case 0:
-                            listener.onActionClick(note, "toggle_pin");
-                            break;
-                        case 1:
-                            listener.onActionClick(note, "edit");
-                            break;
-                        case 2:
-                            listener.onActionClick(note, "delete");
-                            break;
+                        case 0: listener.onActionClick(note, "toggle_pin"); break;
+                        case 1: listener.onActionClick(note, "favourite"); break;
+                        case 2: listener.onActionClick(note, "archive"); break;
+                        case 3: listener.onActionClick(note, "edit"); break;
+                        case 4: listener.onActionClick(note, "delete"); break;
                     }
                 })
-                .setNegativeButton("Cancel", null)
                 .show();
     }
+
 
     private int getRandomColor() {
         List<Integer> colorCode = new ArrayList<>();
@@ -121,7 +132,7 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
 class NotesViewHolder extends RecyclerView.ViewHolder {
     CardView notes_container;
     TextView textView_title, textView_notes, textView_date;
-    ImageView imageView_pin;
+    ImageView imageView_pin,icon_favourite, icon_archive;;
 
     public NotesViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -129,6 +140,8 @@ class NotesViewHolder extends RecyclerView.ViewHolder {
         textView_title = itemView.findViewById(R.id.textview_title);
         textView_notes = itemView.findViewById(R.id.textView_notes);
         textView_date = itemView.findViewById(R.id.textView_date);
+        icon_favourite = itemView.findViewById(R.id.icon_favourite); // Add this
+        icon_archive = itemView.findViewById(R.id.icon_archive); // Add this
         imageView_pin = itemView.findViewById(R.id.imageView_pin);
     }
 }

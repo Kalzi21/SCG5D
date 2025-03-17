@@ -108,6 +108,7 @@ public class NotesTakerActivity extends AppCompatActivity {
             notes.setNotes(description);
             notes.setDate(formatter.format(date));
             notes.setPinned(false); // Explicitly set to false (redundant but safe)
+            database.maindao().insert(notes);
         }
 
         // Return result

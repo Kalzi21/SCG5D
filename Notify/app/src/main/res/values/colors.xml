@@ -14,5 +14,6 @@
     <color name="color4">#00FF11</color>
     <color name="color5">#00FFDD</color>
     <color name="color6">#FF0000</color>
+    <color name="gold">#D7C301</color>
     <color name="bright_gray">#F5F5F5</color>
 </resources>

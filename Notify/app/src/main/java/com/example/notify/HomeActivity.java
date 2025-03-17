@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.example.notify.Adapters.NotesListAdapters;
 import com.example.notify.Database.RoomDB;
 import com.example.notify.Models.Notes;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -46,7 +47,6 @@ public class HomeActivity extends AppCompatActivity {
         archivedLabel = findViewById(R.id.archivedLabel);
         noNotesText = findViewById(R.id.noNotesText);
         recyclerView = findViewById(R.id.recycler_home);
-        fab_add = findViewById(R.id.fab_add);
 
         // Initialize Database
         database = RoomDB.getInstance(this);
@@ -59,12 +59,29 @@ public class HomeActivity extends AppCompatActivity {
         updateRecycler(notes);
 
         // Set onClickListener for the FAB to add notes
-        fab_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId(); // Get the selected item's ID
+
+            if (itemId == R.id.nav_add) {
                 Intent intent = new Intent(HomeActivity.this, NotesTakerActivity.class);
                 startActivityForResult(intent, 101);
+                return true;
+            } else if (itemId == R.id.nav_home) {
+                // Handle home click
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                // Handle profile click
+                return true;
+            } else if (itemId == R.id.nav_settings) {
+                // Handle settings click
+                return true;
+            } else if (itemId == R.id.nav_notifications) {
+                // Handle notifications click
+                return true;
             }
+
+            return false; // Return false if no item is selected
         });
 
         // Check if notes exist and show message
@@ -172,5 +189,49 @@ public class HomeActivity extends AppCompatActivity {
             // Handle long click if required
             Toast.makeText(HomeActivity.this, "Note long clicked", Toast.LENGTH_SHORT).show();
         }
+
+        @Override
+        public void onActionClick(Notes note, String action) {
+            switch (action) {
+                case "toggle_pin":
+                    if (!note.isPinned()) {
+                        database.maindao().unpinAll();
+                    }
+                    // Toggle the pin state of the selected note
+                    database.maindao().pin(note.getID(), !note.isPinned());
+                    break;
+
+                case "favourite":
+                    database.maindao().setFavourite(note.getID(), !note.isFavourite());
+                    break;
+                case "archive":
+                    database.maindao().setArchived(note.getID(), !note.isArchived());
+                    break;
+                case "delete":
+                    database.maindao().delete(note);
+                    break;
+                case "edit":
+                    openNoteForEditing(note);
+                    return;
+            }
+            refreshNotes();
+        }
+
+        private void refreshNotes() {
+            notes = database.maindao().getAll();
+            notesListAdapters.updateList(notes);
+        }
+
+
+
+        @Override
+        public void LongClick(Notes notes, View cardView) {
+
+        }
     };
+    private void openNoteForEditing(Notes note) {
+        Intent intent = new Intent(HomeActivity.this, NotesTakerActivity.class);
+        intent.putExtra("existing_note", note); // Pass the existing note to edit
+        startActivityForResult(intent, 101); // Use a request code (e.g., 101)
+    }
 }
