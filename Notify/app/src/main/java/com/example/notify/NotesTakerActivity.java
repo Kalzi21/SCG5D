@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.notify.Database.RoomDB;
 import com.example.notify.Models.Notes;
@@ -70,6 +71,33 @@ public class NotesTakerActivity extends AppCompatActivity {
                 }
             }
         });
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId(); // Get the selected item's ID
+
+            if (itemId == R.id.nav_add) {
+                Intent intent = new Intent(NotesTakerActivity.this, NotesTakerActivity.class);
+                startActivityForResult(intent, 101);
+                return true;
+            } else if (itemId == R.id.nav_home) {
+                Intent intent = new Intent(NotesTakerActivity.this, HomeActivity.class);
+                startActivityForResult(intent, 101);
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                // Handle profile click
+                return true;
+            } else if (itemId == R.id.nav_settings) {
+                // Handle settings click
+                return true;
+            } else if (itemId == R.id.nav_notifications) {
+                // Handle notifications click
+                return true;
+            }
+
+            return false; // Return false if no item is selected
+        });
+
 
         // Check if editing an existing note
         existingNote = (Notes) getIntent().getSerializableExtra("existing_note");
