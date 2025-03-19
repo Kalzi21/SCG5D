@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -76,7 +77,8 @@ public class HomeActivity extends AppCompatActivity {
                 // Handle profile click
                 return true;
             } else if (itemId == R.id.nav_settings) {
-                // Handle settings click
+                Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+                startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_notifications) {
                 // Handle notifications click
@@ -181,6 +183,12 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         updateRecycler(filteredNotes);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        notesListAdapters.notifyDataSetChanged(); // Refresh the adapter
     }
 
     @Override

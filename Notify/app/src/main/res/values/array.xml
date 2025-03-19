@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="single_colors">
+        <item>@color/single_color1</item>
+        <item>@color/single_color2</item>
+        <item>@color/single_color3</item>
+        <item>@color/single_color4</item>
+        <item>@color/single_color5</item>
+        <item>@color/single_color6</item>
+    </array>
+</resources>

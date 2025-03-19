@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -10,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="@color/white"
         android:gravity="center_vertical"
         android:padding="8dp">
 
@@ -17,14 +19,28 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Dark Mode"
+            android:text="Notes Color"
+            android:fontFamily="@font/poppins_black"
             android:textSize="16sp"
             android:textColor="@color/black"/>
 
+        <!-- Switch for random colors -->
         <Switch
-            android:id="@+id/darkModeSwitch"
+            android:id="@+id/randomColorsSwitch"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+
+            android:fontFamily="@font/poppins_light"
+            android:text="Enable Random Colors"
+            android:textColor="@color/black"/>
+
+        <!-- Button to choose a single color -->
+        <Button
+            android:id="@+id/chooseColorButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose Single Color"
+            android:visibility="gone" />
     </LinearLayout>
 
     <!-- Add more settings here -->

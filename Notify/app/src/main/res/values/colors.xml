@@ -17,4 +17,11 @@
     <color name="color6">#FF0000</color>
     <color name="gold">#D7C301</color>
     <color name="bright_gray">#F5F5F5</color>
+
+    <color name="single_color1">#FFCC80</color> <!-- Light orange -->
+    <color name="single_color2">#80DEEA</color> <!-- Light blue -->
+    <color name="single_color3">#C5E1A5</color> <!-- Light green -->
+    <color name="single_color4">#FFAB91</color> <!-- Light red -->
+    <color name="single_color5">#B39DDB</color> <!-- Light purple -->
+    <color name="single_color6">#F48FB1</color> <!-- Light pink -->
 </resources>

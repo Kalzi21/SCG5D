@@ -106,7 +106,7 @@ public class NotesTakerActivity extends AppCompatActivity {
             editText_notes.setText(existingNote.getNotes());
         }
 
-        imageView_save.setOnClickListener(view -> saveNote());
+
     }
 
     private void saveNote() {

@@ -1,6 +1,7 @@
 package com.example.notify.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,11 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull NotesViewHolder holder, int position) {
+        // Load settings from SharedPreferences
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+        boolean isRandomColorsEnabled = sharedPreferences.getBoolean("RandomColorsEnabled", true);
+        int selectedColor = sharedPreferences.getInt("SelectedColor", Color.WHITE); // Default to white if no color is selected
+
         // Your existing binding code
         holder.textView_title.setText(list.get(position).getTitle());
         holder.textView_notes.setText(list.get(position).getNotes());
@@ -53,9 +59,14 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
             holder.imageView_pin.setVisibility(View.GONE);
         }
 
-        // Your existing color code
-        int color_code = getRandomColor();
-        holder.notes_container.setCardBackgroundColor(holder.itemView.getResources().getColor(color_code, null));
+        if (isRandomColorsEnabled) {
+            // Use random color
+            int color_code = getRandomColor();
+            holder.notes_container.setCardBackgroundColor(holder.itemView.getResources().getColor(color_code, null));
+        } else {
+            // Use a single color (e.g., white or any other color)
+            holder.notes_container.setCardBackgroundColor(selectedColor);
+        }
 
         // Modified long-click listener for multi-actions
         holder.notes_container.setOnLongClickListener(view -> {
