@@ -26,8 +26,7 @@ public abstract class MainDAO {
     public abstract List<Notes> getAll();
 
     // Update a note by its ID
-    @Query("UPDATE notes SET title = :title, notes = :notes WHERE ID = :id")
-    public abstract void update(int id, String title, String notes);
+
 
     // Delete a note
     @Delete

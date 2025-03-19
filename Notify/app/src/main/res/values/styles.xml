@@ -34,4 +34,6 @@
             <item name="android:textSize">18sp</item> <!-- Larger size for bold italic -->
         </style>
 
+
+
 </resources>

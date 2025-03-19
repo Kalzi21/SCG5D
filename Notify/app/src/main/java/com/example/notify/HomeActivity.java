@@ -3,6 +3,8 @@ package com.example.notify;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -115,6 +117,40 @@ public class HomeActivity extends AppCompatActivity {
                 showNotes("archived");
             }
         });
+
+        // Add search functionality
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Not needed
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Filter notes based on the search query
+                filterNotes(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // Not needed
+            }
+        });
+    }
+
+    // Method to filter notes
+    private void filterNotes(String query) {
+        List<Notes> filteredNotes = new ArrayList<>();
+
+        // Loop through all notes and check if the title or content matches the query
+        for (Notes note : notes) {
+            if (note.getTitle().toLowerCase().contains(query.toLowerCase())){
+                filteredNotes.add(note);
+            }
+        }
+
+        // Update the RecyclerView with the filtered list
+        notesListAdapters.updateList(filteredNotes);
     }
 
     private void highlightLabel(TextView selectedLabel) {
@@ -155,7 +191,11 @@ public class HomeActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 Notes new_notes = (Notes) data.getSerializableExtra("note");
                 if (new_notes != null) {
-                    database.maindao().insert(new_notes); // Insert into database
+                    if (new_notes.getID() == 0) { // New note (ID is 0)
+                        database.maindao().insert(new_notes);
+                    } else { // Existing note (ID is not 0)
+                        database.maindao().update(new_notes);
+                    }
 
                     // Fetch the latest notes from the database
                     notes.clear();  // Clear the existing list

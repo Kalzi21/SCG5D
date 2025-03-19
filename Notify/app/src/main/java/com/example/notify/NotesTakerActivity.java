@@ -40,37 +40,6 @@ public class NotesTakerActivity extends AppCompatActivity {
         // Initialize the database
         database = RoomDB.getInstance(this);
 
-        imageView_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    String title = editText_title.getText().toString();
-                    String description = editText_notes.getText().toString();
-
-                    if (description.isEmpty()) {
-                        Toast.makeText(NotesTakerActivity.this, "Please add some notes!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    SimpleDateFormat formatter = new SimpleDateFormat("EEE, d MMM yyy HH:mm a");
-                    Date date = new Date();
-
-                    notes = new Notes();
-                    notes.setTitle(title);
-                    notes.setNotes(description);
-                    notes.setDate(formatter.format(date));
-
-                    Intent intent = new Intent();
-                    intent.putExtra("note", notes);
-                    setResult(Activity.RESULT_OK, intent);
-                    finish();  // Close activity after saving the note
-                } catch (Exception e) {
-                    e.printStackTrace();  // Log the error
-                    Toast.makeText(NotesTakerActivity.this, "Error saving note", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
         // Check if editing an existing note
         existingNote = (Notes) getIntent().getSerializableExtra("existing_note");
         if (existingNote != null) {
