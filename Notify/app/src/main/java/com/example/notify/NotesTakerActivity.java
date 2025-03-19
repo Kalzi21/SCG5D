@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.notify.Database.RoomDB;
 import com.example.notify.Models.Notes;
@@ -39,6 +40,64 @@ public class NotesTakerActivity extends AppCompatActivity {
 
         // Initialize the database
         database = RoomDB.getInstance(this);
+
+        imageView_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    String title = editText_title.getText().toString();
+                    String description = editText_notes.getText().toString();
+
+                    if (description.isEmpty()) {
+                        Toast.makeText(NotesTakerActivity.this, "Please add some notes!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    SimpleDateFormat formatter = new SimpleDateFormat("EEE, d MMM yyy HH:mm a");
+                    Date date = new Date();
+
+                    notes = new Notes();
+                    notes.setTitle(title);
+                    notes.setNotes(description);
+                    notes.setDate(formatter.format(date));
+
+                    Intent intent = new Intent();
+                    intent.putExtra("note", notes);
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();  // Close activity after saving the note
+                } catch (Exception e) {
+                    e.printStackTrace();  // Log the error
+                    Toast.makeText(NotesTakerActivity.this, "Error saving note", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId(); // Get the selected item's ID
+
+            if (itemId == R.id.nav_add) {
+                Intent intent = new Intent(NotesTakerActivity.this, NotesTakerActivity.class);
+                startActivityForResult(intent, 101);
+                return true;
+            } else if (itemId == R.id.nav_home) {
+                Intent intent = new Intent(NotesTakerActivity.this, HomeActivity.class);
+                startActivityForResult(intent, 101);
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                // Handle profile click
+                return true;
+            } else if (itemId == R.id.nav_settings) {
+                // Handle settings click
+                return true;
+            } else if (itemId == R.id.nav_notifications) {
+                // Handle notifications click
+                return true;
+            }
+
+            return false; // Return false if no item is selected
+        });
+
 
         // Check if editing an existing note
         existingNote = (Notes) getIntent().getSerializableExtra("existing_note");
