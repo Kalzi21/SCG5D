@@ -56,5 +56,14 @@ public abstract class MainDAO {
     @Query("UPDATE notes SET is_archived = :archived WHERE ID = :id")
     public abstract void setArchived(int id, boolean archived);
 
+    @Query("UPDATE notes SET image_uri = :imageUri WHERE ID = :id")
+    public abstract void setImageUri(int id, String imageUri);
+
+    @Query("UPDATE notes SET reminder_time = :reminderTime WHERE ID = :id")
+    public abstract void setReminderTime(int id, long reminderTime);
+
+    @Query("UPDATE notes SET tasks = :tasks WHERE ID = :id")
+    public abstract void setTasks(int id, String tasks);
+
     // Optional: You can add methods to handle pinning or filtering by other criteria if needed.
 }

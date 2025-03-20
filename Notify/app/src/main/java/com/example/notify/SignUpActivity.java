@@ -30,8 +30,6 @@ public class SignUpActivity extends AppCompatActivity {
         termsCheckBox = findViewById(R.id.termsCheckBox);
         signUpButton = findViewById(R.id.signUpButton);
         googleButton = findViewById(R.id.googleButton);
-        facebookButton = findViewById(R.id.facebookButton);
-        appleButton = findViewById(R.id.appleButton);
         loginLink = findViewById(R.id.loginLink);
 
         signUpButton.setOnClickListener(v -> {

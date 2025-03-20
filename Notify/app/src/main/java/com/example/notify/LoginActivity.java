@@ -26,8 +26,6 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
         googleLogin = findViewById(R.id.googleLogin);
-        facebookLogin = findViewById(R.id.facebookLogin);
-        appleLogin = findViewById(R.id.appleLogin);
         forgotPassword = findViewById(R.id.forgotPassword);
         signUp = findViewById(R.id.signUp);
 
@@ -78,20 +76,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Facebook Login
-        facebookLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "Logging in with Facebook...", Toast.LENGTH_SHORT).show();
-            }
-        });
 
-        // Apple Login
-        appleLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "Logging in with Apple...", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

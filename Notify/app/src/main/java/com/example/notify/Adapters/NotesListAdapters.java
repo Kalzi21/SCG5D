@@ -3,12 +3,20 @@ package com.example.notify.Adapters;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
@@ -18,6 +26,7 @@ import com.example.notify.Models.Notes;
 import com.example.notify.NotesClickListener;
 import com.example.notify.R;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -89,29 +98,92 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
         } else if (note.isFavourite()) {
             holder.notes_container.setCardBackgroundColor(Color.YELLOW);
         }
+
+        // Load image if available
+        if (list.get(position).getImageUri() != null) {
+            Uri imageUri = Uri.parse(list.get(position).getImageUri());
+            holder.noteImage.setImageURI(imageUri);
+            holder.noteImage.setVisibility(View.VISIBLE);
+        } else {
+            holder.noteImage.setVisibility(View.GONE);
+        }
+
+        // Load tasks if available
+        String tasksJson = list.get(position).getTasks();
+        if (tasksJson != null && !tasksJson.isEmpty()) {
+            try {
+                Gson gson = new Gson();
+                Type taskListType = new TypeToken<List<String>>() {}.getType();
+                List<String> tasks = gson.fromJson(tasksJson, taskListType);
+
+                // Clear existing views in todoContainer
+                holder.todoContainer.removeAllViews();
+
+                // Add tasks to todoContainer
+                for (String task : tasks) {
+                    CheckBox checkBox = new CheckBox(context);
+                    checkBox.setText(task);
+                    holder.todoContainer.addView(checkBox);
+                }
+            } catch (JsonSyntaxException e) {
+                Log.e("NotesListAdapters", "Invalid JSON: " + tasksJson, e);
+            }
+        } else {
+            // If no tasks, ensure the container is empty
+            holder.todoContainer.removeAllViews();
+        }
     }
 
     private void showActionDialog(Notes note, CardView notes_container) {
-        CharSequence[] actions = new CharSequence[]{
-                note.isPinned() ? "Unpin" : "Pin",
-                note.isFavourite() ? "Remove Favourite" : "Add to Favourites",
-                note.isArchived() ? "Unarchive" : "Archive",
-                "Edit",
-                "Delete"
-        };
+        // Inflate the custom layout
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_note_actions, null);
 
-        new AlertDialog.Builder(context)
+        // Initialize buttons
+        Button btnPin = dialogView.findViewById(R.id.btnPin);
+        Button btnFavourite = dialogView.findViewById(R.id.btnFavourite);
+        Button btnArchive = dialogView.findViewById(R.id.btnArchive);
+        Button btnEdit = dialogView.findViewById(R.id.btnEdit);
+        Button btnDelete = dialogView.findViewById(R.id.btnDelete);
+
+        // Set button text based on note state
+        btnPin.setText(note.isPinned() ? "Unpin" : "Pin");
+        btnFavourite.setText(note.isFavourite() ? "Remove Favourite" : "Add to Favourites");
+        btnArchive.setText(note.isArchived() ? "Unarchive" : "Archive");
+
+        // Create the dialog
+        AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("Note Actions")
-                .setItems(actions, (dialog, which) -> {
-                    switch (which) {
-                        case 0: listener.onActionClick(note, "toggle_pin"); break;
-                        case 1: listener.onActionClick(note, "favourite"); break;
-                        case 2: listener.onActionClick(note, "archive"); break;
-                        case 3: listener.onActionClick(note, "edit"); break;
-                        case 4: listener.onActionClick(note, "delete"); break;
-                    }
-                })
-                .show();
+                .setView(dialogView) // Set the custom layout
+                .create();
+
+        // Set button click listeners
+        btnPin.setOnClickListener(v -> {
+            listener.onActionClick(note, "toggle_pin");
+            dialog.dismiss();
+        });
+
+        btnFavourite.setOnClickListener(v -> {
+            listener.onActionClick(note, "favourite");
+            dialog.dismiss();
+        });
+
+        btnArchive.setOnClickListener(v -> {
+            listener.onActionClick(note, "archive");
+            dialog.dismiss();
+        });
+
+        btnEdit.setOnClickListener(v -> {
+            listener.onActionClick(note, "edit");
+            dialog.dismiss();
+        });
+
+        btnDelete.setOnClickListener(v -> {
+            listener.onActionClick(note, "delete");
+            dialog.dismiss();
+        });
+
+        // Show the dialog
+        dialog.show();
     }
 
 
@@ -141,9 +213,11 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
 }
 
 class NotesViewHolder extends RecyclerView.ViewHolder {
+    public ImageView noteImage;
     CardView notes_container;
     TextView textView_title, textView_notes, textView_date;
-    ImageView imageView_pin,icon_favourite, icon_archive;;
+    ImageView imageView_pin,icon_favourite, icon_archive;
+    LinearLayout todoContainer; // Add this
 
     public NotesViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -154,5 +228,7 @@ class NotesViewHolder extends RecyclerView.ViewHolder {
         icon_favourite = itemView.findViewById(R.id.icon_favourite); // Add this
         icon_archive = itemView.findViewById(R.id.icon_archive); // Add this
         imageView_pin = itemView.findViewById(R.id.imageView_pin);
+        noteImage = itemView.findViewById(R.id.noteImage); // Initialize noteImage
+        todoContainer = itemView.findViewById(R.id.todoContainer); // Initialize todoContainer
     }
 }

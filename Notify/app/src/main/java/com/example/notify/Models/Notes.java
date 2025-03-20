@@ -30,6 +30,39 @@ public class Notes implements Serializable {
     @ColumnInfo(name = "is_archived")
     private boolean isArchived; // For Archived
 
+    @ColumnInfo(name = "image_uri")
+    private String imageUri; // Store the URI of the image
+
+    @ColumnInfo(name = "reminder_time")
+    private long reminderTime; // Store the reminder time in milliseconds
+
+    @ColumnInfo(name = "tasks")
+    private String tasks; // Store tasks as a JSON string or a serialized list
+
+    // Getters and setters for the new fields
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
+
+    public long getReminderTime() {
+        return reminderTime;
+    }
+
+    public void setReminderTime(long reminderTime) {
+        this.reminderTime = reminderTime;
+    }
+
+    public String getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(String tasks) {
+        this.tasks = tasks;
+    }
     // Getters and setters for the fields
 
     public int getID() {
