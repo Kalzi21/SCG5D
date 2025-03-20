@@ -68,13 +68,14 @@ public class HomeActivity extends AppCompatActivity {
 
             if (itemId == R.id.nav_add) {
                 Intent intent = new Intent(HomeActivity.this, NotesTakerActivity.class);
-                startActivityForResult(intent, 101);
+                startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_home) {
                 // Handle home click
                 return true;
             } else if (itemId == R.id.nav_profile) {
-                // Handle profile click
+                Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+                startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_settings) {
                 Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);

@@ -191,18 +191,19 @@ public class NotesTakerActivity extends AppCompatActivity {
             int itemId = item.getItemId(); // Get the selected item's ID
 
             if (itemId == R.id.nav_add) {
-                Intent intent = new Intent(NotesTakerActivity.this, NotesTakerActivity.class);
-                startActivityForResult(intent, 101);
+                
                 return true;
             } else if (itemId == R.id.nav_home) {
                 Intent intent = new Intent(NotesTakerActivity.this, HomeActivity.class);
                 startActivityForResult(intent, 101);
                 return true;
             } else if (itemId == R.id.nav_profile) {
-                // Handle profile click
+                Intent intent = new Intent(NotesTakerActivity.this, ProfileActivity.class);
+                startActivityForResult(intent, 101);
                 return true;
             } else if (itemId == R.id.nav_settings) {
-                // Handle settings click
+                Intent intent = new Intent(NotesTakerActivity.this, SettingsActivity.class);
+                startActivityForResult(intent, 101);
                 return true;
             } else if (itemId == R.id.nav_notifications) {
                 // Handle notifications click
