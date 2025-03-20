@@ -68,7 +68,7 @@ public class HomeActivity extends AppCompatActivity {
 
             if (itemId == R.id.nav_add) {
                 Intent intent = new Intent(HomeActivity.this, NotesTakerActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 101);
                 return true;
             } else if (itemId == R.id.nav_home) {
                 // Handle home click
