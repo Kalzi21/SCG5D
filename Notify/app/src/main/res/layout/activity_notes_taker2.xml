@@ -36,6 +36,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+
+
+
+            <ImageView
+                android:id="@+id/btnAddImage"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_add_image"
+                android:contentDescription="Add image"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginLeft="45dp" />
+
+
+            <ImageView
+                android:id="@+id/reminderIcon"
+                android:layout_width="32dp"
+                android:layout_marginLeft="145dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_reminder"
+                android:contentDescription="Set Reminder" />
+
             <!-- Save Icon -->
             <ImageView
                 android:id="@+id/imageView_save"
@@ -44,7 +67,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="16dp"
                 android:src="@drawable/ic_save"
-                app:tint="@color/black"
+                app:tint="@color/purple_500"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"/>
@@ -60,6 +83,8 @@
         
         app:cardElevation="4dp"
         android:background="@color/white">
+
+
 
         <EditText
             android:id="@+id/editText_title"
@@ -77,6 +102,18 @@
             android:imeOptions="actionNext"
             android:maxLines="1"
             android:ellipsize="end"/>
+
+
+        <Button
+            android:id="@+id/btnAddTodo"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="250dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/purple_700"
+            android:fontFamily="@font/poppins"
+            android:textColor="@color/white"
+            android:text="Add Task" />
     </androidx.cardview.widget.CardView>
 
     <!-- CardView for Notes Input -->
@@ -95,18 +132,46 @@
             android:id="@+id/editText_notes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Start typing your notes..."
-            android:fontFamily="@font/poppins_light"
-            android:textColorHint="@color/black"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="normal"
             android:background="@color/white"
-            android:padding="16dp"
+            android:fontFamily="@font/poppins_light"
             android:gravity="top"
+            android:hint="Start typing your notes..."
             android:inputType="textMultiLine"
             android:maxLines="1000"
-            android:scrollbars="vertical"/>
+            android:padding="16dp"
+            android:scrollbars="vertical"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textSize="18sp"
+            android:textStyle="normal" />
+
+        <LinearLayout
+            android:id="@+id/todoContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:orientation="vertical"
+            android:layout_marginTop="45dp">
+
+            <!-- Example to-do item -->
+            <CheckBox
+                android:id="@+id/todoItem1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_light"
+                android:text="New Task" />
+
+            <ImageView
+                android:id="@+id/noteImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="18dp"
+                android:layout_marginLeft="80dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <!-- Bottom Navigation Bar -->
@@ -120,5 +185,5 @@
         app:itemTextColor="@color/bottom_nav_text_color"
         app:elevation="8dp"
         app:labelVisibilityMode="labeled"/>
-    
+
 </LinearLayout>

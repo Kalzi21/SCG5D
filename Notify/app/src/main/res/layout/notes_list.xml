@@ -66,7 +66,7 @@ android:padding="12dp">
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_pin"
+        android:src="@drawable/ic_pin_box"
     android:contentDescription="Pinned"/>
 
 </RelativeLayout>
@@ -96,6 +96,13 @@ android:padding="12dp">
     android:singleLine="true"
     android:ellipsize="end"/>
 
+    <ImageView
+        android:id="@+id/noteImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+    android:contentDescription="Embedded image" />
+
     <!-- Favourite Icon -->
     <ImageView
         android:id="@+id/icon_favourite"
@@ -105,5 +112,14 @@ android:padding="12dp">
         android:contentDescription="Favourites"
         android:src="@drawable/ic_star"
         app:tint="@color/gold" />
+
+
 </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/todoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    </LinearLayout>
     </androidx.cardview.widget.CardView>

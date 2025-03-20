@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/dialog_note_actions.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Pin/Unpin Button -->
+
+    <!-- Favourite/Remove Favourite Button -->
+    <Button
+        android:id="@+id/btnPin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:drawableLeft="@drawable/ic_pin_box"
+        android:drawablePadding="8dp"
+        android:padding="12dp"
+        android:gravity="start|center_vertical"
+        android:text="Pin"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/btnFavourite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add to Favourites"
+        android:fontFamily="@font/poppins"
+        android:drawableLeft="@drawable/ic_star"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:gravity="start|center_vertical"
+    android:textColor="@color/black" />
+
+    <!-- Archive/Unarchive Button -->
+    <Button
+        android:id="@+id/btnArchive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Archive"
+        android:fontFamily="@font/poppins"
+        android:drawableLeft="@drawable/ic_archive"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:gravity="start|center_vertical"
+    android:textColor="@color/black" />
+
+    <!-- Edit Button -->
+    <Button
+        android:id="@+id/btnEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        android:fontFamily="@font/poppins"
+        android:drawableLeft="@drawable/ic_edit"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:gravity="start|center_vertical"
+    android:textColor="@color/black" />
+
+    <!-- Delete Button -->
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:fontFamily="@font/poppins"
+        android:drawableLeft="@drawable/ic_delete"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:gravity="start|center_vertical"
+    android:textColor="@color/gray" /> <!-- Use a different color for delete -->
+
+</LinearLayout>
