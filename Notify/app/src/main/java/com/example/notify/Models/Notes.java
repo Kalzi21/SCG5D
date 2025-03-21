@@ -1,43 +1,60 @@
 package com.example.notify.Models;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
 import java.io.Serializable;
+import java.util.List;
 
-@Entity(tableName = "notes")
 public class Notes implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
-    private int ID;
-
-    @ColumnInfo(name = "title")
+    private String ID;
+    private String userId; // Owner of the note
+    private List<String> taggedUsers; // List of tagged user IDs
     private String title;
-
-    @ColumnInfo(name = "notes")
     private String notes;
-
-    @ColumnInfo(name = "date")
     private String date;
+    private boolean pinned;
+    private boolean isFavourite;
+    private boolean isArchived;
 
-    @ColumnInfo(name = "pinned")
-    private boolean pinned; // For pinning notes
+    // Empty constructor required for Firebase
+    public Notes() {
+    }
 
-    @ColumnInfo(name = "is_favourite")
-    private boolean isFavourite; // For Favourites
+    // Constructor with tagged users
+    public Notes(String ID, String userId, List<String> taggedUsers, String title, String notes, String date, boolean pinned, boolean isFavourite, boolean isArchived) {
+        this.ID = ID;
+        this.userId = userId;
+        this.taggedUsers = taggedUsers;
+        this.title = title;
+        this.notes = notes;
+        this.date = date;
+        this.pinned = pinned;
+        this.isFavourite = isFavourite;
+        this.isArchived = isArchived;
+    }
 
-    @ColumnInfo(name = "is_archived")
-    private boolean isArchived; // For Archived
-
-    // Getters and setters for the fields
-
-    public int getID() {
+    // Getters and Setters
+    public String getID() {
         return ID;
     }
 
-    public void setID(int ID) {
+    public void setID(String ID) {
         this.ID = ID;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public List<String> getTaggedUsers() {
+        return taggedUsers;
+    }
+
+    public void setTaggedUsers(List<String> taggedUsers) {
+        this.taggedUsers = taggedUsers;
     }
 
     public String getTitle() {
@@ -76,15 +93,15 @@ public class Notes implements Serializable {
         return isFavourite;
     }
 
-    public void setFavourite(boolean isFavourite) {
-        this.isFavourite = isFavourite;
+    public void setFavourite(boolean favourite) {
+        isFavourite = favourite;
     }
 
     public boolean isArchived() {
         return isArchived;
     }
 
-    public void setArchived(boolean isArchived) {
-        this.isArchived = isArchived;
+    public void setArchived(boolean archived) {
+        isArchived = archived;
     }
 }
