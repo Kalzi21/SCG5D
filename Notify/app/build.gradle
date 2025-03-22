@@ -43,6 +43,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:24.0.0' // Firestore Database
     implementation 'com.google.firebase:firebase-storage:20.0.0'
 
+    implementation 'com.google.android.gms:play-services-base:18.2.0'
+    implementation 'com.google.android.gms:play-services-auth:20.6.0'
+
+
+
     implementation libs.room.runtime
     implementation libs.appcompat
     implementation libs.material
