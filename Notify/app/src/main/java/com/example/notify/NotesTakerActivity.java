@@ -12,12 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.notify.Models.Notes;
 import com.example.notify.firebase.FirebaseNoteRepository;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.Locale;
 
 public class NotesTakerActivity extends AppCompatActivity {
     private EditText editText_title, editText_notes;
@@ -71,8 +69,7 @@ public class NotesTakerActivity extends AppCompatActivity {
             return;
         }
 
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE, d MMM yyyy HH:mm a", Locale.getDefault());
-        String formattedDate = formatter.format(new Date());
+        Timestamp timestamp = Timestamp.now(); // Get Firestore timestamp
 
         if (existingNote != null) {
             // Update existing note
@@ -84,11 +81,11 @@ public class NotesTakerActivity extends AppCompatActivity {
                     });
         } else {
             // Create new note in Firestore
-            repository.createNote(title, description, formattedDate, false, false, false, Arrays.asList())
+            repository.createNote(title, description, timestamp, false, false, false, Arrays.asList()) // Use Timestamp
                     .addOnSuccessListener(documentReference -> {
                         String userId = repository.getCurrentUserId();
                         if (userId != null) {
-                            existingNote = new Notes(documentReference.getId(), userId, null, title, description, formattedDate, false, false, false);
+                            existingNote = new Notes(documentReference.getId(), userId, null, title, description, timestamp, false, false, false); // Use Timestamp
                             setResultAndFinish(existingNote);
                         } else {
                             Toast.makeText(this, "Error: User not logged in", Toast.LENGTH_SHORT).show();
@@ -103,7 +100,8 @@ public class NotesTakerActivity extends AppCompatActivity {
 
     private void setResultAndFinish(Notes note) {
         Intent intent = new Intent();
-        intent.putExtra("note", note);
+        // Explicitly cast to Parcelable to remove ambiguity
+        intent.putExtra("note", (android.os.Parcelable) note);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }

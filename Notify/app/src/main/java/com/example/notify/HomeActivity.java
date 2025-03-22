@@ -130,7 +130,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(HomeActivity.this, "Failed to fetch notes: " + e.getMessage(),
+                    Toast.makeText(HomeActivity.this, "Error1: " + e.getMessage(),
                             Toast.LENGTH_SHORT).show();
                 });
     }
@@ -184,7 +184,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(HomeActivity.this, "Failed to fetch notes: " + e.getMessage(),
+                    Toast.makeText(HomeActivity.this, "Error2: " + e.getMessage(),
                             Toast.LENGTH_SHORT).show();
                 });
     }

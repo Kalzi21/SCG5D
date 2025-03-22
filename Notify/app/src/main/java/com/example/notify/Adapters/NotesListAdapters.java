@@ -16,18 +16,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.notify.Models.Notes;
 import com.example.notify.NotesClickListener;
 import com.example.notify.R;
+import com.google.firebase.Timestamp;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
-    Context context;
-    List<Notes> list;
-    NotesClickListener listener;
-    private List<Notes> notes;
+    private Context context;
+    private List<Notes> list;
+    private NotesClickListener listener;
 
-    // Modify constructor to accept Context (generic) instead of MainActivity
     public NotesListAdapters(Context context, List<Notes> list, NotesClickListener listener) {
         this.context = context;
         this.list = (list != null) ? list : new ArrayList<>();
@@ -42,42 +43,44 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull NotesViewHolder holder, int position) {
-        // Your existing binding code
-        holder.textView_title.setText(list.get(position).getTitle());
-        holder.textView_notes.setText(list.get(position).getNotes());
-        holder.textView_date.setText(list.get(position).getDate());
-      
-        if (list.get(position).isPinned()) {
-            holder.imageView_pin.setVisibility(View.VISIBLE);
+        Notes currentNote = list.get(position);
+
+        holder.textView_title.setText(currentNote.getTitle());
+        holder.textView_notes.setText(currentNote.getNotes());
+        holder.textView_date.setText(formatTimestamp(currentNote.getDate()));
+
+        holder.imageView_pin.setVisibility(currentNote.isPinned() ? View.VISIBLE : View.GONE);
+        holder.icon_favourite.setVisibility(currentNote.isFavourite() ? View.VISIBLE : View.GONE);
+        holder.icon_archive.setVisibility(currentNote.isArchived() ? View.VISIBLE : View.GONE);
+
+        if (currentNote.isArchived()) {
+            holder.notes_container.setCardBackgroundColor(Color.LTGRAY);
+        } else if (currentNote.isFavourite()) {
+            holder.notes_container.setCardBackgroundColor(Color.YELLOW);
         } else {
-            holder.imageView_pin.setVisibility(View.GONE);
+            int color_code = getRandomColor();
+            holder.notes_container.setCardBackgroundColor(holder.itemView.getResources().getColor(color_code, null));
         }
 
-        // Your existing color code
-        int color_code = getRandomColor();
-        holder.notes_container.setCardBackgroundColor(holder.itemView.getResources().getColor(color_code, null));
-
-        // Modified long-click listener for multi-actions
-        holder.notes_container.setOnLongClickListener(view -> {
-            showActionDialog(list.get(position), holder.notes_container);
-            return true;
+        holder.notes_container.setOnClickListener(view -> {
+            if (listener != null) {
+                listener.onClick(currentNote);
+            }
         });
 
-        // Keep your existing click listeners
-        holder.notes_container.setOnClickListener(view ->
-                listener.onClick(list.get(holder.getAdapterPosition())));
+        holder.notes_container.setOnLongClickListener(view -> {
+            if (listener != null) {
+                showActionDialog(currentNote, holder.notes_container);
+                return true;
+            }
+            return false;
+        });
+    }
 
-        // Update onBindViewHolder
-        Notes note = new Notes();
-        holder.icon_favourite.setVisibility(note.isFavourite() ? View.VISIBLE : View.GONE);
-        holder.icon_archive.setVisibility(note.isArchived() ? View.VISIBLE : View.GONE);
-
-// Add color coding for categories
-        if (note.isArchived()) {
-            holder.notes_container.setCardBackgroundColor(Color.LTGRAY);
-        } else if (note.isFavourite()) {
-            holder.notes_container.setCardBackgroundColor(Color.YELLOW);
-        }
+    private String formatTimestamp(Timestamp timestamp) {
+        if (timestamp == null) return "Unknown Date";
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm a", Locale.ENGLISH);
+        return sdf.format(timestamp.toDate());
     }
 
     private void showActionDialog(Notes note, CardView notes_container) {
@@ -102,7 +105,6 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
                 })
                 .show();
     }
-
 
     private int getRandomColor() {
         List<Integer> colorCode = new ArrayList<>();
@@ -132,7 +134,7 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
 class NotesViewHolder extends RecyclerView.ViewHolder {
     CardView notes_container;
     TextView textView_title, textView_notes, textView_date;
-    ImageView imageView_pin,icon_favourite, icon_archive;;
+    ImageView imageView_pin, icon_favourite, icon_archive;
 
     public NotesViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -140,8 +142,8 @@ class NotesViewHolder extends RecyclerView.ViewHolder {
         textView_title = itemView.findViewById(R.id.textview_title);
         textView_notes = itemView.findViewById(R.id.textView_notes);
         textView_date = itemView.findViewById(R.id.textView_date);
-        icon_favourite = itemView.findViewById(R.id.icon_favourite); // Add this
-        icon_archive = itemView.findViewById(R.id.icon_archive); // Add this
+        icon_favourite = itemView.findViewById(R.id.icon_favourite);
+        icon_archive = itemView.findViewById(R.id.icon_archive);
         imageView_pin = itemView.findViewById(R.id.imageView_pin);
     }
 }
