@@ -10,6 +10,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,8 +28,8 @@ public class FirebaseNoteRepository {
         this.notesCollection = db.collection("notes"); // Firestore collection name
     }
 
-    // ✅ Create a new note with tagged users
-    public Task<DocumentReference> createNote(String title, String notes, String date, boolean pinned, boolean isFavourite, boolean isArchived, List<String> taggedUsers) {
+    // ✅ Create a new note with tagged users (Stores Firestore Timestamp)
+    public Task<DocumentReference> createNote(String title, String notes, Timestamp date, boolean pinned, boolean isFavourite, boolean isArchived, List<String> taggedUsers) {
         String userId = getCurrentUserId();
         if (userId == null) {
             return Tasks.forException(new Exception("User not logged in"));
@@ -46,7 +47,7 @@ public class FirebaseNoteRepository {
         });
     }
 
-    // ✅ Fixed: Read notes (fetch notes owned + notes where user is tagged)
+    // ✅ Read notes (fetch notes owned + notes where user is tagged)
     public Task<List<DocumentSnapshot>> readNotes() {
         String userId = getCurrentUserId();
         if (userId == null) {
@@ -74,7 +75,7 @@ public class FirebaseNoteRepository {
                             }
                         }
                     }
-                    allNotes.sort((a, b) -> b.getDate("date").compareTo(a.getDate("date"))); // Sort by date descending
+                    allNotes.sort((a, b) -> b.getTimestamp("date").compareTo(a.getTimestamp("date"))); // Sort by Firestore Timestamp
                     return allNotes;
                 });
     }
