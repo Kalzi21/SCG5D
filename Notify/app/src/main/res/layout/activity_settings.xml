@@ -17,14 +17,6 @@
         android:gravity="center_vertical"
         android:padding="8dp">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Notes Color"
-            android:fontFamily="@font/poppins_black"
-            android:textSize="18sp"  
-            android:textColor="@color/black"/> <!-- Increased Font Size -->
 
         <!-- Switch for Random Colors -->
         <Switch
@@ -41,7 +33,10 @@
             android:id="@+id/chooseColorButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="Choose Color"
+            android:backgroundTint="@color/purple_500"
+            android:fontFamily="@font/poppins"
             android:textSize="16sp"
             android:visibility="gone"/>
     </LinearLayout>

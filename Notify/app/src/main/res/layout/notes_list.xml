@@ -84,6 +84,8 @@ android:padding="12dp">
     android:ellipsize="end"
     android:paddingBottom="8dp"/>
 
+
+
 <!-- Date Section -->
 <TextView
     android:id="@+id/textView_date"
@@ -97,14 +99,6 @@ android:padding="12dp">
     android:ellipsize="end"/>
 
     <ImageView
-        android:id="@+id/noteImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-    android:contentDescription="Embedded image" />
-
-    <!-- Favourite Icon -->
-    <ImageView
         android:id="@+id/icon_favourite"
         android:layout_width="374dp"
         android:layout_height="20dp"
@@ -113,6 +107,22 @@ android:padding="12dp">
         android:src="@drawable/ic_star"
         app:tint="@color/gold" />
 
+    <ImageView
+        android:id="@+id/noteImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+    android:contentDescription="Embedded image" />
+
+    <LinearLayout
+        android:id="@+id/tagsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <!-- Tags will be added programmatically -->
+    </LinearLayout>
 
 </LinearLayout>
 

@@ -77,7 +77,7 @@
     <!-- CardView for Title Input -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="120dp"
         android:layout_margin="16dp"
         app:cardCornerRadius="12dp"
         
@@ -114,6 +114,43 @@
             android:fontFamily="@font/poppins"
             android:textColor="@color/white"
             android:text="Add Task" />
+
+        <LinearLayout
+            android:id="@+id/tagsContainer"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="70dp">
+
+            <EditText
+                android:id="@+id/tagInput"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+
+                android:layout_height="50dp"
+                android:hint="@user to tag someone"
+                android:imeOptions="actionDone"/>
+
+            <Button
+                android:id="@+id/btnAddTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/purple_700"
+                android:text="Add"/>
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/selectedTagsContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"/>
+        </HorizontalScrollView>
     </androidx.cardview.widget.CardView>
 
     <!-- CardView for Notes Input -->

@@ -14,12 +14,16 @@ import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.notify.Firebase.FirebaseManager;
+import com.example.notify.Models.User;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notify.Models.Notes;
@@ -35,6 +39,14 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
     Context context;
     List<Notes> list;
     NotesClickListener listener;
+    private boolean isActive = true; // Add this flag
+
+    public void clearListeners() {
+        this.isActive = false;
+        this.listener = null;
+    }
+
+    private FirebaseManager firebaseManager;
     private List<Notes> notes;
 
     // Modify constructor to accept Context (generic) instead of MainActivity
@@ -52,6 +64,16 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull NotesViewHolder holder, int position) {
+        if (list == null || position < 0 || position >= list.size()) {
+            return; // or handle this case appropriately
+        }
+
+
+        Notes note = list.get(position);
+        if (note == null) {
+            return;
+        }
+
         // Load settings from SharedPreferences
         SharedPreferences sharedPreferences = context.getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         boolean isRandomColorsEnabled = sharedPreferences.getBoolean("RandomColorsEnabled", true);
@@ -88,7 +110,7 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
                 listener.onClick(list.get(holder.getAdapterPosition())));
 
         // Update onBindViewHolder
-        Notes note = new Notes();
+
         holder.icon_favourite.setVisibility(note.isFavourite() ? View.VISIBLE : View.GONE);
         holder.icon_archive.setVisibility(note.isArchived() ? View.VISIBLE : View.GONE);
 
@@ -100,12 +122,13 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
         }
 
         // Load image if available
-        if (list.get(position).getImageUri() != null) {
-            Uri imageUri = Uri.parse(list.get(position).getImageUri());
+        String imageUriString = list.get(position).getImageUri();
+        if (imageUriString != null && !imageUriString.isEmpty()) {
+            Uri imageUri = Uri.parse(imageUriString);
             holder.noteImage.setImageURI(imageUri);
-            holder.noteImage.setVisibility(View.VISIBLE);
+            holder.noteImage.setVisibility(View.VISIBLE); // Make the ImageView visible
         } else {
-            holder.noteImage.setVisibility(View.GONE);
+            holder.noteImage.setVisibility(View.GONE); // Hide the ImageView if no image
         }
 
         // Load tasks if available
@@ -132,6 +155,33 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
             // If no tasks, ensure the container is empty
             holder.todoContainer.removeAllViews();
         }
+
+        // Clear existing tags
+        holder.todoContainer.removeAllViews();
+
+// Add tagged users
+        List<String> taggedUsers = note.getTaggedUsersList();
+        holder.tagsContainer.removeAllViews();
+
+        if (!taggedUsers.isEmpty()) {
+            for (String userId : taggedUsers) {
+                // Create and add tag views
+                TextView tagView = new TextView(context);
+                tagView.setText("@" + userId);
+                tagView.setBackgroundResource(R.drawable.tag_background);
+                tagView.setPadding(8, 4, 8, 4);
+                tagView.setTextColor(ContextCompat.getColor(context, R.color.white));
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(0, 0, 8, 0);
+                tagView.setLayoutParams(params);
+
+                holder.tagsContainer.addView(tagView);
+            }
+    }
     }
 
     private void showActionDialog(Notes note, CardView notes_container) {
@@ -206,8 +256,8 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
         return list.size();
     }
 
-    public void updateList(List<Notes> newNotes) {
-        this.list = newNotes;
+    public void updateList(List<Notes> newList) {
+        this.list = newList != null ? newList : new ArrayList<>();
         notifyDataSetChanged();
     }
 }
@@ -217,15 +267,16 @@ class NotesViewHolder extends RecyclerView.ViewHolder {
     CardView notes_container;
     TextView textView_title, textView_notes, textView_date;
     ImageView imageView_pin,icon_favourite, icon_archive;
-    LinearLayout todoContainer; // Add this
+    LinearLayout todoContainer, tagsContainer; // Add this
 
     public NotesViewHolder(@NonNull View itemView) {
         super(itemView);
         notes_container = itemView.findViewById(R.id.notes_container);
         textView_title = itemView.findViewById(R.id.textview_title);
+        tagsContainer = itemView.findViewById(R.id.tagsContainer);
         textView_notes = itemView.findViewById(R.id.textView_notes);
         textView_date = itemView.findViewById(R.id.textView_date);
-        icon_favourite = itemView.findViewById(R.id.icon_favourite); // Add this
+        icon_favourite = itemView.findViewById(R.id.icon_favourite);
         icon_archive = itemView.findViewById(R.id.icon_archive); // Add this
         imageView_pin = itemView.findViewById(R.id.imageView_pin);
         noteImage = itemView.findViewById(R.id.noteImage); // Initialize noteImage
