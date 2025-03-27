@@ -17,12 +17,31 @@ public class Notes implements Serializable {
     private long reminderTime;
     private String tasks;
 
+    @PropertyName("isPinned")
     private boolean isPinned;
 
+    @PropertyName("isFavourite")
     private boolean isFavourite;
 
+    @PropertyName("isArchived")
     private boolean isArchived;
     private String taggedUsers= "";
+
+    private List<String> taggedUsersList = new ArrayList<>();
+    private transient List<String> taggedUsernames = new ArrayList<>();
+
+    public Notes() {
+        this.title = "";
+        this.notes = "";
+        this.date = "";
+        this.imageUri = "";
+        this.tasks = "";
+        this.taggedUsers = "";
+        this.reminderTime = 0L;
+        this.isPinned = false;
+        this.isFavourite = false;
+        this.isArchived = false;
+    }
 
     // Getters and Setters
 
@@ -89,54 +108,78 @@ public class Notes implements Serializable {
         this.tasks = tasks;
     }
 
+    @PropertyName("isPinned")
     public boolean isPinned() {
         return isPinned;
     }
 
+    @PropertyName("isPinned")
     public void setPinned(boolean pinned) {
         this.isPinned = pinned;
     }
 
+    @PropertyName("isFavourite")
     public boolean isFavourite() {
         return isFavourite;
     }
 
+    @PropertyName("isFavourite")
     public void setFavourite(boolean favourite) {
         this.isFavourite = favourite;
     }
 
+    @PropertyName("isArchived")
     public boolean isArchived() {
         return isArchived;
     }
 
+    @PropertyName("isArchived")
     public void setArchived(boolean archived) {
         this.isArchived = archived;
     }
-
 
     // Getter for taggedUsers (Firestore-compatible)
     public String getTaggedUsers() {
         return taggedUsers != null ? taggedUsers : "";
     }
 
-    // Setter for taggedUsers (Firestore-compatible)
-
-    // Helper method to get taggedUsers as a List<String>
-    @Exclude // Exclude from Firestore serialization
-    public List<String> getTaggedUsersList() {
-        String users = getTaggedUsers(); // Use the safe getter
-        if (users.isEmpty()) {
-            return new ArrayList<>();
+    public void setTaggedUsers(String taggedUsers) {
+        this.taggedUsers = taggedUsers != null ? taggedUsers : "";
+        // Update the list representation
+        if (!this.taggedUsers.isEmpty()) {
+            this.taggedUsersList = new ArrayList<>(Arrays.asList(this.taggedUsers.split(",")));
+        } else {
+            this.taggedUsersList = new ArrayList<>();
         }
-        return Arrays.asList(users.split(","));
     }
 
-    // Helper method to set taggedUsers from a List<String>
-    @Exclude // Exclude from Firestore serialization
-    public void setTaggedUsersList(List<String> taggedUsers) {
-        this.taggedUsers = (taggedUsers == null || taggedUsers.isEmpty())
-                ? ""
-                : String.join(",", taggedUsers);
+    public List<String> getTaggedUsersList() {
+        if (taggedUsersList == null) {
+            taggedUsersList = new ArrayList<>();
+        }
+        return taggedUsersList;
+    }
+
+    public void setTaggedUsersList(List<String> taggedUsersList) {
+        this.taggedUsersList = taggedUsersList != null ? taggedUsersList : new ArrayList<>();
+        // Update the taggedUsers string representation
+        this.taggedUsers = String.join(",", this.taggedUsersList);
+    }
+
+    public List<String> getTaggedUsernames() {
+        if (taggedUsernames == null) {
+            taggedUsernames = new ArrayList<>();
+        }
+        return taggedUsernames;
+    }
+
+    public void addTaggedUsername(String username) {
+        if (taggedUsernames == null) {
+            taggedUsernames = new ArrayList<>();
+        }
+        if (!taggedUsernames.contains(username)) {
+            taggedUsernames.add(username);
+        }
     }
 
     // Getter for documentId
