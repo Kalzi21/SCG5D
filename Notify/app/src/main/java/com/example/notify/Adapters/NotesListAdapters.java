@@ -31,8 +31,11 @@ import com.example.notify.NotesClickListener;
 import com.example.notify.R;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
@@ -111,7 +114,6 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
 
         // Update onBindViewHolder
 
-        holder.icon_favourite.setVisibility(note.isFavourite() ? View.VISIBLE : View.GONE);
         holder.icon_archive.setVisibility(note.isArchived() ? View.VISIBLE : View.GONE);
 
 // Add color coding for categories
@@ -160,14 +162,11 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
         holder.todoContainer.removeAllViews();
 
 // Add tagged users
-        List<String> taggedUsers = note.getTaggedUsersList();
-        holder.tagsContainer.removeAllViews();
-
-        if (!taggedUsers.isEmpty()) {
-            for (String userId : taggedUsers) {
-                // Create and add tag views
+        if (note.getTaggedUsernames() != null && !note.getTaggedUsernames().isEmpty()) {
+            holder.tagsContainer.removeAllViews();
+            for (String username : note.getTaggedUsernames()) {
                 TextView tagView = new TextView(context);
-                tagView.setText("@" + userId);
+                tagView.setText("@" + username);
                 tagView.setBackgroundResource(R.drawable.tag_background);
                 tagView.setPadding(8, 4, 8, 4);
                 tagView.setTextColor(ContextCompat.getColor(context, R.color.white));
@@ -181,7 +180,20 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
 
                 holder.tagsContainer.addView(tagView);
             }
-    }
+            holder.tagsContainer.setVisibility(View.VISIBLE);
+        } else {
+            holder.tagsContainer.setVisibility(View.GONE);
+        }
+
+        // Add this near your other UI bindings:
+
+        if (note.getReminderTime() > 0) {
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, HH:mm", Locale.getDefault());
+            holder.reminderText.setText("Reminder: " + sdf.format(new Date(note.getReminderTime())));
+            holder.reminderText.setVisibility(View.VISIBLE);
+        } else {
+            holder.reminderText.setVisibility(View.GONE);
+        }
     }
 
     private void showActionDialog(Notes note, CardView notes_container) {
@@ -265,7 +277,7 @@ public class NotesListAdapters extends RecyclerView.Adapter<NotesViewHolder> {
 class NotesViewHolder extends RecyclerView.ViewHolder {
     public ImageView noteImage;
     CardView notes_container;
-    TextView textView_title, textView_notes, textView_date;
+    TextView textView_title, textView_notes, textView_date, reminderText;
     ImageView imageView_pin,icon_favourite, icon_archive;
     LinearLayout todoContainer, tagsContainer; // Add this
 
@@ -276,7 +288,7 @@ class NotesViewHolder extends RecyclerView.ViewHolder {
         tagsContainer = itemView.findViewById(R.id.tagsContainer);
         textView_notes = itemView.findViewById(R.id.textView_notes);
         textView_date = itemView.findViewById(R.id.textView_date);
-        icon_favourite = itemView.findViewById(R.id.icon_favourite);
+        reminderText = itemView.findViewById(R.id.reminderText);
         icon_archive = itemView.findViewById(R.id.icon_archive); // Add this
         imageView_pin = itemView.findViewById(R.id.imageView_pin);
         noteImage = itemView.findViewById(R.id.noteImage); // Initialize noteImage
