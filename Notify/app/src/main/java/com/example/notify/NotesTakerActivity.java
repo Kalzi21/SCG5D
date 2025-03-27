@@ -2,6 +2,8 @@ package com.example.notify;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,8 +27,10 @@ import com.google.android.material.chip.Chip;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class NotesTakerActivity extends AppCompatActivity {
@@ -50,6 +55,7 @@ public class NotesTakerActivity extends AppCompatActivity {
         imageView_save = findViewById(R.id.imageView_save);
         editText_title = findViewById(R.id.editText_title);
         editText_notes = findViewById(R.id.editText_notes);
+        selectedTagsContainer = findViewById(R.id.selectedTagsContainer);
 
         // Initialize FirebaseNoteRepository
         repository = new FirebaseNoteRepository();
@@ -59,6 +65,12 @@ public class NotesTakerActivity extends AppCompatActivity {
         if (existingNote != null) {
             editText_title.setText(existingNote.getTitle());
             editText_notes.setText(existingNote.getNotes());
+            reminderTime = existingNote.getReminderTime();
+            if (existingNote.getTaggedUsersList() != null) {
+                taggedUserIds = new ArrayList<>(existingNote.getTaggedUsersList());
+                updateSelectedTagsUI();
+            }
+            updateReminderUI();
         }
 
         imageView_save.setOnClickListener(view -> saveNote());
@@ -118,6 +130,9 @@ public class NotesTakerActivity extends AppCompatActivity {
 
             return false;
         });
+
+        // Add reminder button
+        findViewById(R.id.setReminderButton).setOnClickListener(v -> showDateTimePicker());
     }
 
     private void showUserSearchDialog(String searchQuery) {
@@ -206,6 +221,7 @@ public class NotesTakerActivity extends AppCompatActivity {
         note.setArchived(true);
         note.setImageUri(imageUri != null ? imageUri.toString() : null);
         note.setReminderTime(reminderTime);
+        note.setTaggedUsersList(taggedUserIds);
 
         if (existingNote != null) {
             // Update existing note
@@ -231,6 +247,37 @@ public class NotesTakerActivity extends AppCompatActivity {
             });
         }
 
-        note.setTaggedUsersList(taggedUserIds);
+
+    }
+
+    private void showDateTimePicker() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this);
+        datePickerDialog.setOnDateSetListener((view, year, month, dayOfMonth) -> {
+            TimePickerDialog timePickerDialog = new TimePickerDialog(
+                this,
+                (view1, hourOfDay, minute) -> {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(year, month, dayOfMonth, hourOfDay, minute);
+                    reminderTime = calendar.getTimeInMillis();
+                    updateReminderUI();
+                },
+                Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
+                Calendar.getInstance().get(Calendar.MINUTE),
+                true
+            );
+            timePickerDialog.show();
+        });
+        datePickerDialog.show();
+    }
+
+    private void updateReminderUI() {
+        TextView reminderText = findViewById(R.id.reminderText);
+        if (reminderTime > 0) {
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault());
+            reminderText.setText("Reminder set for: " + sdf.format(new Date(reminderTime)));
+            reminderText.setVisibility(View.VISIBLE);
+        } else {
+            reminderText.setVisibility(View.GONE);
+        }
     }
 }

@@ -153,6 +153,21 @@ public class HomeActivity extends AppCompatActivity {
                         Notes note = doc.toObject(Notes.class);
                         if (note != null) {
                             note.setDocumentId(doc.getId());
+                            // Load tagged users' information
+                            if (note.getTaggedUsersList() != null) {
+                                for (String taggedUserId : note.getTaggedUsersList()) {
+                                    firebaseNoteRepository.getUser(taggedUserId)
+                                        .addOnSuccessListener(userDoc -> {
+                                            if (userDoc.exists()) {
+                                                String username = userDoc.getString("username");
+                                                if (username != null) {
+                                                    note.addTaggedUsername(username);
+                                                    notesListAdapters.notifyDataSetChanged();
+                                                }
+                                            }
+                                        });
+                                }
+                            }
                             notes.add(note);
                         }
                     }
@@ -176,20 +191,41 @@ public class HomeActivity extends AppCompatActivity {
     private void filterNotes(String query) {
         List<Notes> filteredNotes = new ArrayList<>();
         for (Notes note : notes) {
-            if (note.getTitle().toLowerCase().contains(query.toLowerCase())) {
+            // Check title and description
+            if (note.getTitle().toLowerCase().contains(query.toLowerCase()) ||
+                note.getNotes().toLowerCase().contains(query.toLowerCase())) {
                 filteredNotes.add(note);
+                continue;
+            }
+
+            // Include notes where current user is tagged
+            if (isUserTaggedInNote(note)) {
+                filteredNotes.add(note);
+                continue;
+            }
+
+            // Check tagged users
+            if (note.getTaggedUsersList() != null) {
+                for (String userId : note.getTaggedUsersList()) {
+                    firebaseNoteRepository.getUser(userId).addOnSuccessListener(document -> {
+                        String username = document.getString("username");
+                        if (username != null && username.toLowerCase().contains(query.toLowerCase())) {
+                            if (!filteredNotes.contains(note)) {
+                                filteredNotes.add(note);
+                                updateRecycler(filteredNotes);
+                            }
+                        }
+                    });
+                }
             }
         }
         updateRecycler(filteredNotes);
+    }
 
-        // Add to filterNotes method
-        Notes note = new Notes();
-        if (note.getTaggedUsers() != null) {
-            List<String> taggedUsers = note.getTaggedUsersList();
-            if (taggedUsers.contains(currentUserId)) {
-                filteredNotes.add(note);
-            }
-        }
+    // Add this method to check if user is tagged
+    private boolean isUserTaggedInNote(Notes note) {
+        return note.getTaggedUsersList() != null && 
+               note.getTaggedUsersList().contains(currentUserId);
     }
 
     private void highlightLabel(TextView selectedLabel) {
@@ -323,6 +359,11 @@ public class HomeActivity extends AppCompatActivity {
                         break;
                     case "delete":
                         handleDeleteOperation(noteId);
+                        return;
+                    case "edit":
+                        Intent editIntent = new Intent(HomeActivity.this, NotesTakerActivity.class);
+                        editIntent.putExtra("existing_note", notes);
+                        startActivity(editIntent);
                         return;
                     default:
                         return;
