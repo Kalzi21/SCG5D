@@ -10,7 +10,6 @@
     android:layout_margin="8dp"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     android:clickable="true"
-
     android:focusable="true">
 
 <LinearLayout
@@ -25,8 +24,6 @@ android:padding="12dp">
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp">
 
-
-
     <!-- Archive Icon -->
 
     <!-- Title -->
@@ -40,7 +37,6 @@ android:padding="12dp">
         android:layout_marginEnd="1dp"
         android:contentDescription="Archives"
         android:src="@drawable/ic_archive"
-
         app:tint="@color/grey" />
 
     <TextView
@@ -59,7 +55,6 @@ android:padding="12dp">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-
     <!-- Pin Icon -->
     <ImageView
         android:id="@+id/imageView_pin"
@@ -67,7 +62,7 @@ android:padding="12dp">
         android:layout_height="20dp"
         android:layout_alignParentEnd="true"
         android:src="@drawable/ic_pin_box"
-    android:contentDescription="Pinned"/>
+        android:contentDescription="Pinned"/>
 
 </RelativeLayout>
 
@@ -84,8 +79,6 @@ android:padding="12dp">
     android:ellipsize="end"
     android:paddingBottom="8dp"/>
 
-
-
 <!-- Date Section -->
 <TextView
     android:id="@+id/textView_date"
@@ -98,38 +91,48 @@ android:padding="12dp">
     android:singleLine="true"
     android:ellipsize="end"/>
 
-    <ImageView
-        android:id="@+id/icon_favourite"
-        android:layout_width="374dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="60dp"
-        android:contentDescription="Favourites"
-        android:src="@drawable/ic_star"
-        app:tint="@color/gold" />
-
-    <ImageView
-        android:id="@+id/noteImage"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/textView_tagged_users"
+        android:layout_width="355dp"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/purple_500"
+        android:textSize="12sp"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/reminderText"
+        android:layout_width="38dp"
+        android:layout_height="20dp"
+        android:textColor="@color/purple_700"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+<ImageView
+    android:id="@+id/noteImage"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:visibility="gone"
     android:contentDescription="Embedded image" />
 
-    <LinearLayout
-        android:id="@+id/tagsContainer"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:orientation="horizontal"
-        android:padding="4dp">
+<LinearLayout
+    android:id="@+id/tagsContainer"
+    android:layout_width="match_parent"
+    android:layout_height="20dp"
+    android:orientation="horizontal"
+    android:padding="4dp">
 
-        <!-- Tags will be added programmatically -->
-    </LinearLayout>
+    <!-- Tags will be added programmatically -->
+</LinearLayout>
 
 </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/todoContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-    </LinearLayout>
-    </androidx.cardview.widget.CardView>
+<LinearLayout
+    android:id="@+id/todoContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+</LinearLayout>
+</androidx.cardview.widget.CardView>

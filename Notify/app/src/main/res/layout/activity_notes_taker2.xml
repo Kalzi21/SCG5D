@@ -118,11 +118,11 @@
         <LinearLayout
             android:id="@+id/tagsContainer"
             android:layout_width="match_parent"
-
+            android:layout_marginTop="60dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingHorizontal="20dp"
-            android:paddingTop="70dp">
+            android:paddingTop="2dp">
 
             <EditText
                 android:id="@+id/tagInput"
@@ -149,7 +149,8 @@
                 android:id="@+id/selectedTagsContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal"
+                android:padding="8dp"/>
         </HorizontalScrollView>
     </androidx.cardview.widget.CardView>
 
@@ -209,6 +210,25 @@
                 android:scaleType="centerCrop"
                 android:visibility="gone" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/setReminderButton"
+            android:layout_width="wrap_content"
+            android:backgroundTint="@color/purple_700"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editText_notes"
+            android:text="Set Reminder"
+            android:layout_marginTop="400dp"
+            android:layout_marginLeft="225dp"
+            />
+
+        <TextView
+            android:id="@+id/reminderText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/setReminderButton"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"/>
     </androidx.cardview.widget.CardView>
 
     <!-- Bottom Navigation Bar -->
